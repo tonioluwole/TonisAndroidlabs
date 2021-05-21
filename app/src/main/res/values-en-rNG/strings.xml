@@ -3,4 +3,6 @@
     <string name="app_name">Toni\'s Android labs</string>
     <string name="hello_message">How far world!</string>
     <string name="button_message">I be button</string>
+    <string name="editmessage">I be editText</string>
+    <string name="hinttext">Oya type something</string>
 </resources>
