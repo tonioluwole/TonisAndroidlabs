@@ -2,51 +2,40 @@ package algonquin.cst2335.oluw0006;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.text.Editable;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.os.Bundle;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    ImageView imgView;
+    Switch sw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView mytext = findViewById(R.id.textview);
+        imgView = findViewById(R.id.flagview);
+        sw = findViewById(R.id.spin_switch);
 
-        EditText myedit = findViewById(R.id.myedittext);
+        sw.setOnCheckedChangeListener( (btn, isChecked) -> {
+            if (isChecked)
+            {
+                RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                rotate.setDuration(2000);
+                rotate.setRepeatCount(Animation.INFINITE);
+                rotate.setInterpolator(new LinearInterpolator());
 
-        ImageButton imgbtn = findViewById(R.id.animage);
+                imgView.startAnimation(rotate);
+            } else {
+                imgView.clearAnimation();
+            }
 
-        Button btn = findViewById(R.id.mybutton);
-        imgbtn.setOnClickListener( (v) -> {mytext.setText("Your edit text has: " + myedit.getText());});
-
-        CheckBox  mycheck = findViewById(R.id.mycb);
-        mycheck.setOnCheckedChangeListener( (cbtn, ischecked) -> {
-            if (ischecked)
-                btn.setText("Checkbox is on");
-            else
-                btn.setText("Checkbox is off");
-        });
-
-        RadioButton myradio = findViewById(R.id.myradio);
-        myradio.setOnCheckedChangeListener( (cbtn, ischecked) -> {
-            Context context = getApplicationContext();
-            CharSequence text = "Hello toast!";
-            int duration = Toast.LENGTH_SHORT;
-
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
         });
     }
 }

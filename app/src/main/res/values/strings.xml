@@ -4,4 +4,9 @@
     <string name="button_message">I\'m a button that tells you about the checkbox</string>
     <string name="editmessage">I\'m an EditText</string>
     <string name="hinttext">Write something here</string>
+    <string name="spin_message">Spin flag</string>
+    <string name="button1">Button 1</string>
+    <string name="button2">Button 2</string>
+    <string name="button3">Button 3</string>
+
 </resources>

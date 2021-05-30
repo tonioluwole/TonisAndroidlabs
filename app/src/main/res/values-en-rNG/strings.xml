@@ -5,4 +5,8 @@
     <string name="button_message">I be button</string>
     <string name="editmessage">I be editText</string>
     <string name="hinttext">Oya type something</string>
+    <string name="button1">Button ookan</string>
+    <string name="button2">Button meji</string>
+    <string name="button3">Button meta</string>
+    <string name="spin_message">Spin flag</string>
 </resources>
