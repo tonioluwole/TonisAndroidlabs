@@ -8,42 +8,34 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textview"
+        android:id="@+id/emailtv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_message" />
+        android:text="Enter your email address:" />
 
     <EditText
-        android:id="@+id/myedittext"
-        android:layout_width="1in"
+        android:id="@+id/emailet"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hinttext"
-        android:text="@string/editmessage"/>
+        android:hint="Type email here" />
+
+    <TextView
+        android:id="@+id/passwordtv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Type your password:" />
+
+    <EditText
+        android:id="@+id/passwordet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/mybutton"
-        android:layout_width="259dp"
+        android:id="@+id/loginButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:text="@string/button_message" />
-
-    <CheckBox
-        android:id="@+id/mycb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="I'm a checkbox" />
-
-    <RadioButton
-        android:id="@+id/myradio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="tap me for toast" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/app_icon"
-        android:id="@+id/animage" />
+        android:text="Login" />
 
 
 </LinearLayout>
