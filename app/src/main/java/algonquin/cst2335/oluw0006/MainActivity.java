@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.Editable;
 import android.util.Log;
 import android.widget.CheckBox;
@@ -55,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+        String emailAddress = prefs.getString("LoginName", "");
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -63,11 +67,18 @@ public class MainActivity extends AppCompatActivity {
         Button loginButton = findViewById(R.id.loginButton);
 
         EditText emailet = findViewById(R.id.emailet);
+        emailet.setText(emailAddress);
 
         Intent nextPage = new Intent( MainActivity.this, SecondActivity.class);
 
+
+
         loginButton.setOnClickListener(  clk -> {
             nextPage.putExtra( "EmailAddress", emailet.getText().toString() );
+            SharedPreferences.Editor  editor = prefs.edit();
+            editor.putString("LoginName", emailet.getText().toString() );
+            editor.apply();
+            
             startActivity( nextPage );
         } );
     }
