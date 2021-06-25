@@ -17,7 +17,7 @@ public class ChatRoom extends AppCompatActivity {
 
         setContentView(R.layout.chatlayout);
         chatList = findViewById(R.id.myrecycler);
-        chatList.setAdapter(new RecyclerView.Adapter());
+        chatList.setAdapter(new MyChatAdapter());
 
         }
 
