@@ -39,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
             String password = et.getText().toString();
 
             checkPasswordComplexity( password );
+            if(checkPasswordComplexity(password) == false) {
+                tv.setText("You Shall Not Pass!");
+            }else {
+                tv.setText("Your password is complex enough");
+            }
         });
     }
 
@@ -116,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "You're missing a special character",Toast.LENGTH_SHORT).show(); // Say that they are missing a lower case letter;
             return false;
         }
+
+
 
         else
             return true; //only get here if they're all true
