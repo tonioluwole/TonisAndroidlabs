@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"algonquin.cst2335.oluw0006","l":"ExampleInstrumentedTest"},{"p":"algonquin.cst2335.oluw0006","l":"ExampleUnitTest"},{"p":"algonquin.cst2335.oluw0006","l":"MainActivity"}]

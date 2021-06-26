@@ -1,51 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textview"
+        android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_message" />
-
-    <EditText
-        android:id="@+id/myedittext"
-        android:layout_width="1in"
-        android:layout_height="wrap_content"
-        android:hint="@string/hinttext"
-        android:text="@string/editmessage"/>
+        android:layout_marginTop="380dp"
+        android:text="Type your password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/mybutton"
-        android:layout_width="259dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:text="@string/button_message" />
-
-    <CheckBox
-        android:id="@+id/mycb"
+        android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="I'm a checkbox" />
+        android:layout_marginBottom="32dp"
+        android:text="Login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <RadioButton
-        android:id="@+id/myradio"
+    <EditText
+        android:id="@+id/et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="tap me for toast" />
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/app_icon"
-        android:id="@+id/animage" />
 
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
