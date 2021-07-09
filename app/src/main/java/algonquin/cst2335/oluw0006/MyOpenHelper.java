@@ -21,13 +21,11 @@ public class MyOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("Create table " + TABLE_NAME + "(_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+        db.execSQL("CREATE Table " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + col_message + " TEXT,"
-                + col_send_receive + "INTEGER,"
-
+                + col_send_receive+ " INTEGER,"
                 /* in case you need more columns*/
-
-                + col_time_sent + "TEXT);" );
+                + col_time_sent + " TEXT);");
     }
 
     @Override
