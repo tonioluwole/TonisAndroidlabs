@@ -82,8 +82,6 @@ public class ChatRoom extends AppCompatActivity {
                         .setNegativeButton("No",(dialog,cl)->{})
                         .setPositiveButton("Yes", (dialog,cl) -> {
 
-                            position = getAbsoluteAdapterPosition();
-
                             ChatMessage removedMessage = messages.get(position);
                             messages.remove(position);
                             adt.notifyItemRemoved(position);
