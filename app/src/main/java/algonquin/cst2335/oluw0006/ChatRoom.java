@@ -30,8 +30,7 @@ public class ChatRoom extends AppCompatActivity {
     MyChatAdapter adt;
     RecyclerView chatList;
 
-    MyOpenHelper opener = new MyOpenHelper(this);
-    SQLiteDatabase db = opener.getWritableDatabase();
+    SQLiteDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,16 +41,17 @@ public class ChatRoom extends AppCompatActivity {
         Button receive = findViewById(R.id.receivebutton);
         EditText field = findViewById(R.id.editmessage);
 
-
+        MyOpenHelper opener = new MyOpenHelper(this);
+         db = opener.getWritableDatabase();
 
         chatList = findViewById(R.id.myrecycler);
 
         Cursor results = db.rawQuery("Select * from " + MyOpenHelper.TABLE_NAME + ";", null);
-        if (results != null && results.moveToFirst()) {
+
             int _idCol = results.getColumnIndex("_id");
-            int messageCol = results.getColumnIndex("col_message");
-            int sendCol = results.getColumnIndex("col_send_receive");
-            int timeCol = results.getColumnIndex("col_time_sent");
+            int messageCol = results.getColumnIndex(MyOpenHelper.col_message);
+            int sendCol = results.getColumnIndex(MyOpenHelper.col_send_receive);
+            int timeCol = results.getColumnIndex(MyOpenHelper.col_time_sent);
 
             while (results.moveToNext()) {
                 long id = results.getInt(_idCol);
@@ -61,9 +61,10 @@ public class ChatRoom extends AppCompatActivity {
 
                 messages.add(new ChatMessage(message, sendOrReceive, time, id));
 
-                results.close();
+
             }
-        }
+            results.close();
+
 
         adt = new MyChatAdapter();
         chatList.setAdapter(adt);
@@ -166,7 +167,7 @@ public class ChatRoom extends AppCompatActivity {
             public int getItemViewType(int position) {
                 ChatMessage message = messages.get(position);
 
-                return position;
+                return message.getSendOrReceive();
             }
 
             @Override
