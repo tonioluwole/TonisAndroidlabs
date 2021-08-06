@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 public class ChatRoom extends AppCompatActivity {
 
     boolean isTablet = false;
+    messageListFragment chatFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +19,7 @@ public class ChatRoom extends AppCompatActivity {
 
         isTablet = findViewById(R.id.detailsRoom) !=null;
 
-        messageListFragment chatFragment = new messageListFragment();
+        chatFragment = new messageListFragment();
         FragmentManager fMgr = getSupportFragmentManager();
         FragmentTransaction tx = fMgr.beginTransaction();
 
@@ -32,12 +33,15 @@ public class ChatRoom extends AppCompatActivity {
         MessageDetailsFragment mdFragment = new MessageDetailsFragment(chatMessage, position);
 
         if(isTablet){
-            getSupportFragmentManager().beginTransaction().add(R.id.detailsRoom, mdFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.detailsRoom, mdFragment).commit();
         }else {
             getSupportFragmentManager().beginTransaction().add(R.id.fragmentRoom, mdFragment).commit();
         }
     }
 
+    public void notifyMessageDeleted(messageListFragment.ChatMessage chosenMessage, int chosenPosition) {
+        chatFragment.notifyMessageDeleted(chosenMessage, chosenPosition);
+    }
 }
 
 

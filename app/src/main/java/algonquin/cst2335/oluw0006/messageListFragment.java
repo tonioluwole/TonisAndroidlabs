@@ -30,6 +30,7 @@ public class messageListFragment extends Fragment {
     ArrayList<ChatMessage> messages = new ArrayList<>();
     MyChatAdapter adt;
     RecyclerView chatList;
+    Button send;
 
     SQLiteDatabase db;
 
@@ -37,7 +38,7 @@ public class messageListFragment extends Fragment {
 
         View chatLayout = inflater.inflate(R.layout.chatlayout, container, false);
 
-        Button send = chatLayout.findViewById(R.id.sendbutton);
+        send = chatLayout.findViewById(R.id.sendbutton);
         Button receive = chatLayout.findViewById(R.id.receivebutton);
         EditText field = chatLayout.findViewById(R.id.editmessage);
 
@@ -112,6 +113,31 @@ public class messageListFragment extends Fragment {
         return chatLayout;
     }
 
+    public void notifyMessageDeleted(ChatMessage chosenMessage, int chosenPosition) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Do you want to delete the message: " + chosenMessage.getMessage())
+                .setTitle("Question: ")
+                .setNegativeButton("No", (dialog, cl) -> {
+                })
+                .setPositiveButton("Yes", (dialog, cl) -> {
+
+                    ChatMessage removedMessage = messages.get(chosenPosition);
+                    messages.remove(chosenPosition);
+                    adt.notifyItemRemoved(chosenPosition);
+
+                    db.delete(MyOpenHelper.TABLE_NAME, "_id=?", new String[]{Long.toString(removedMessage.getId())});
+
+
+                    Snackbar.make(send, "You deleted message #" + chosenPosition, Snackbar.LENGTH_LONG)
+                            .setAction("Undo", clk -> {
+                               messages.add(chosenPosition, removedMessage);
+                               adt.notifyItemInserted(chosenPosition);
+
+                            })
+                            .show();
+                }).create().show();
+    }
+
     class MyRowViews extends RecyclerView.ViewHolder {
         TextView messageText;
         TextView timeText;
@@ -125,35 +151,8 @@ public class messageListFragment extends Fragment {
                 ChatRoom parentActivity = (ChatRoom)getContext();
                 int position = getAdapterPosition();
                 parentActivity.userClickedMessage(messages.get(position), position);
-                /*
+
                 MyRowViews newRow = adt.onCreateViewHolder(null, adt.getItemViewType(position));
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage("Do you want to delete the message: " + messageText.getText())
-                        .setTitle("Question: ")
-                        .setNegativeButton("No", (dialog, cl) -> {
-                        })
-                        .setPositiveButton("Yes", (dialog, cl) -> {
-
-                            ChatMessage removedMessage = messages.get(position);
-                            messages.remove(position);
-                            adt.notifyItemRemoved(position);
-
-                            db.delete(MyOpenHelper.TABLE_NAME, "_id=?", new String[]{Long.toString(removedMessage.getId())});
-
-                            Snackbar.make(messageText, "You deleted message #" + position, Snackbar.LENGTH_LONG)
-                                    .setAction("Undo", clk -> {
-                                        db.execSQL("Insert into " + MyOpenHelper.TABLE_NAME + " values('" + removedMessage.getId() +
-                                                "','" + removedMessage.getMessage() +
-                                                "','" + removedMessage.getSendOrReceive() +
-                                                "','" + removedMessage.getTimeSent() + "');");
-
-                                        messages.add(position, removedMessage);
-                                        adt.notifyItemInserted(position);
-
-                                    })
-                                    .show();
-                        }).create().show();*/
             });
 
             messageText = itemView.findViewById(R.id.message);
