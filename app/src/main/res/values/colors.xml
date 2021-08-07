@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="my_primary">#E89684</color>
-    <color name="my_secondary">#84D5E8</color>
+    <color name="my_primary">#009AE8</color>
+    <color name="my_secondary">#81C100</color>
     <color name="my_statusbar">#FFFFFF</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
     <color name="dark_primary">#180029</color>
-    <color name="dark_secondary">#281700</color>
+    <color name="dark_secondary">#272727</color>
     <color name="dark_statusbar">#161616</color>
 
-    <color name="my_text">#9684E8</color>
+    <color name="my_text">#000000</color>
 </resources>
