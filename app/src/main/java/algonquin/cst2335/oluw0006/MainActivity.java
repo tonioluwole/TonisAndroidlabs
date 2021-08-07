@@ -21,6 +21,9 @@ import static java.lang.Character.isDigit;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -45,7 +48,13 @@ import java.util.stream.Collectors;
  */
 
 public class MainActivity extends AppCompatActivity {
-
+    String description = null;
+    String iconName = null;
+    String current = null;
+    String min = null;
+    String max = null;
+    String humidity = null;
+    String unit = null;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -65,95 +74,75 @@ public class MainActivity extends AppCompatActivity {
 
                     String stringURL = "https://api.openweathermap.org/data/2.5/weather?q="
                             + cityName
-                            + "&appid=7e943c97096a9784391a981c4d878b22&units=Metric";
+                            + "&appid=7e943c97096a9784391a981c4d878b22&units=Metric&mode=xml";
 
                     URL url = new URL(stringURL);
                     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                     InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
-                    String text = (new BufferedReader(
-                            new InputStreamReader(in, StandardCharsets.UTF_8)))
-                            .lines()
-                            .collect(Collectors.joining("\n"));
+                    XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                    factory.setNamespaceAware(false);
+                    XmlPullParser xpp = factory.newPullParser();
+                    xpp.setInput( in  , "UTF-8");
 
-                    //Entire JSON URL Result
-                    JSONObject theDocument = new JSONObject( text );
+                    while (xpp.next()!=XmlPullParser.END_DOCUMENT){
+                        switch (xpp.getEventType())
+                        {
+                            case XmlPullParser.START_TAG:
+                                if (xpp.getName().equals("temperature")) {
+                                    current = xpp.getAttributeValue(null, "value"); //gets current temp
+                                    min = xpp.getAttributeValue(null, "min"); //gets min temp
+                                    max = xpp.getAttributeValue(null, "max"); //gets max temp
+                                }
+                                if (xpp.getName().equals("weather")) {
+                                    description = xpp.getAttributeValue(null, "value"); //gets weather description
+                                    iconName = xpp.getAttributeValue(null, "icon"); //gets icon name
+                                }
+                                if (xpp.getName().equals("humidity")) {
+                                    unit = xpp.getAttributeValue(null, "unit");
+                                    humidity = xpp.getAttributeValue(null, "value") + unit;//gets humidity
+                                }
 
-                    //Coordinates - JSON Object
-                    JSONObject coord = theDocument.getJSONObject( "coord" );
+                                break;
 
-                    //Weather - (JSON) Array
-                    JSONArray weatherArray = theDocument.getJSONArray ( "weather" );
+                            case XmlPullParser.END_TAG:
 
-                    //Only JSON Object in the weather array at position 0
-                    JSONObject position0 = weatherArray.getJSONObject(0);
+                                break;
 
-                    //Visibility - JSON Integer
-                    int vis = theDocument.getInt("visibility");
+                            case XmlPullParser.TEXT:
 
-                    //City name - JSON string
-                    String name = theDocument.getString( "name" );
+                                break;
+                        }
 
-                    String description = position0.getString("description");
-                    String iconName = position0.getString("icon");
+                        runOnUiThread( (  )  -> {
 
-                    JSONObject mainObject = theDocument.getJSONObject("main");
-                    double current = mainObject.getDouble("temp");
-                    double min = mainObject.getDouble("temp_min");
-                    double max = mainObject.getDouble("temp_max");
-                    int humidity = mainObject.getInt("humidity");
+                            TextView tv = findViewById(R.id.temp);
+                            tv.setText("The current temperature is " + current);
+                            tv.setVisibility(View.VISIBLE);
 
-                    //Commented out because i couldnt figure out wheer to place this. App loads JSON without image
-                    /*Bitmap image = null;
-                    URL imgUrl = new URL( "https://openweathermap.org/img/w/" + iconName + ".png" );
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.connect();
-                    int responseCode = connection.getResponseCode();
-                    if (responseCode == 200) {
-                        image = BitmapFactory.decodeStream(connection.getInputStream());
+                            tv = findViewById(R.id.max);
+                            tv.setText("The max temperature is " + max);
+                            tv.setVisibility(View.VISIBLE);
 
-                        ImageView iv = findViewById(R.id.iv);
-                        iv.setImageBitmap(image);
-                    }
+                            tv = findViewById(R.id.min);
+                            tv.setText("The min temperature is " + min);
+                            tv.setVisibility(View.VISIBLE);
 
-                    FileOutputStream fOut = null;
-                    try {
-                        fOut = openFileOutput( iconName + ".png", Context.MODE_PRIVATE);
-                        image.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-                        fOut.flush();
-                        fOut.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }*/
+                            tv = findViewById(R.id.humidity);
+                            tv.setText("Humidity: " + humidity);
+                            tv.setVisibility(View.VISIBLE);
 
-                    runOnUiThread( (  )  -> {
-                        TextView tv1 = findViewById(R.id.temp);
-                        TextView tv2 = findViewById(R.id.max);
-                        TextView tv3 = findViewById(R.id.min);
-                        TextView tv4 = findViewById(R.id.humidity);
-                        TextView tv5 = findViewById(R.id.description);
-
-                        tv1.setText("The current temperature is " + current);
-                        tv1.setVisibility(View.VISIBLE);
-
-                        tv2.setText("The max temperature is " + max);
-                        tv2.setVisibility(View.VISIBLE);
-
-                        tv3.setText("The min temperature is " + min);
-                        tv3.setVisibility(View.VISIBLE);
-
-                        tv4.setText("Humidity: " + humidity);
-                        tv4.setVisibility(View.VISIBLE);
-
-                        tv5.setText("Description: " + description);
-                        tv5.setVisibility(View.VISIBLE);
+                            tv = findViewById(R.id.description);
+                            tv.setText("Description: " + description);
+                            tv.setVisibility(View.VISIBLE);
 
                         /*ImageView iv = findViewById(R.id.iv);
                         iv.setImageBitmap(image);
                         iv.setVisibility(View.VISIBLE);*/
-                    });
+                        });
+                    }
                 }
-                catch (IOException | JSONException ioe) {
+                catch (IOException | XmlPullParserException ioe) {
                     Log.e("Connection errorssssss:", ioe.getMessage());
                 }
             });
