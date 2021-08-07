@@ -158,9 +158,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         });
-
-        TextView tv = findViewById(R.id.tv);
-        EditText et = findViewById(R.id.ets);
-        Button btn = findViewById(R.id.btn);
     }
 }
