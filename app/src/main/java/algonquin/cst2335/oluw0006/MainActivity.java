@@ -1,6 +1,7 @@
 package algonquin.cst2335.oluw0006;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,13 +69,21 @@ public class MainActivity extends AppCompatActivity {
         EditText cityText = findViewById(R.id.ets);
 
         forecastBtn.setOnClickListener( (click) ->{
+            String cityName = cityText.getText().toString();
+
+            AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Getting forecast")
+                    .setMessage("We're calling people in " +  cityName + " to look outside their windows and tell us what the weather is like over there")
+                    .setView( new ProgressBar(MainActivity.this))
+                    .show();
+
             Executor newThread = Executors.newSingleThreadExecutor();
             newThread.execute( () -> {
                 try {
-                    String cityName = URLEncoder.encode(cityText.getText().toString(), "UTF-8");
+                    String newCityName = URLEncoder.encode(cityText.getText().toString(), "UTF-8");
 
                     String stringURL = "https://api.openweathermap.org/data/2.5/weather?q="
-                            + cityName
+                            + newCityName
                             + "&appid=7e943c97096a9784391a981c4d878b22&units=Metric&mode=xml";
 
                     URL url = new URL(stringURL);
@@ -84,6 +94,29 @@ public class MainActivity extends AppCompatActivity {
                     factory.setNamespaceAware(false);
                     XmlPullParser xpp = factory.newPullParser();
                     xpp.setInput( in  , "UTF-8");
+
+                    //Can't figure the image part out
+                    /*Bitmap image = null;
+                    URL imgUrl = new URL( "https://openweathermap.org/img/w/" + iconName + ".png" );
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.connect();
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == 200) {
+                        image = BitmapFactory.decodeStream(connection.getInputStream());
+
+                        ImageView iv = findViewById(R.id.iv);
+                        iv.setImageBitmap(image);
+                    }
+
+                    FileOutputStream fOut = null;
+                    try {
+                        fOut = openFileOutput( iconName + ".png", Context.MODE_PRIVATE);
+                        image.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }*/
 
                     while (xpp.next()!=XmlPullParser.END_DOCUMENT){
                         switch (xpp.getEventType())
@@ -139,6 +172,8 @@ public class MainActivity extends AppCompatActivity {
                         /*ImageView iv = findViewById(R.id.iv);
                         iv.setImageBitmap(image);
                         iv.setVisibility(View.VISIBLE);*/
+
+                            dialog.hide();
                         });
                     }
                 }
